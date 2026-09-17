@@ -16,61 +16,158 @@ function App() {
     const [recommendation, setRecommendation] = useState("")
 
   function handleAnalyse() {
+    let hostname = ""
+
+if (website !== "") {
+  try {
+    const websiteURL = new URL(website)
+    hostname = websiteURL.hostname.toLowerCase()
+  } catch {
+    riskReasons.push("Website address is not valid")
+    score = score + 5
+  }
+}
   let score = 0
   let riskReasons = []
 
   const lowerMessage = message.toLowerCase()
   const lowerWebsite = website.toLowerCase()
 
+
+const paymentAmount = Number(amount)
+
+if (paymentAmount >= 5000) {
+  score = score + 20
+  riskReasons.push("Very high-value payment")
+} else if (paymentAmount >= 1000) {
+  score = score + 10
+  riskReasons.push("High-value payment")
+} else if (paymentAmount >= 500) {
+  score = score + 5
+  riskReasons.push("Moderate-value payment")
+}
+
   if (newRecipient) {
     score = score + 15
     riskReasons.push("New recipient")
   }
 
-  if (Number(amount) > 1000) {
-    score = score + 10
-    riskReasons.push("High-value payment")
-  }
+if (newRecipient && paymentAmount >= 1000) {
+  score = score + 10
+  riskReasons.push("Large payment to a new recipient")
+}
+const suspiciousCategories = [
+  {
+    name: "Urgency",
+    words: ["urgen", "immediate", "act now", "send now"],
+    points: 15
+  },
 
-const suspiciousPhrases = [
-  "urgent",
-  "immediately",
-  "act now",
-  "send now",
-  "account frozen",
-  "do not tell anyone",
-  "keep this confidential"
+  {
+    name: "Secrecy",
+    words: ["do not tell", "don't tell", "confidential", "secret"],
+    points: 20
+  },
+
+  {
+    name: "Financial Threat",
+    words: ["account frozen", "account suspended", "money at risk"],
+    points: 20
+  }
+]
+for (let i = 0; i < suspiciousCategories.length; i++) {
+  const currentCategory = suspiciousCategories[i]
+    for (let j = 0; j < currentCategory.words.length; j++) {
+        const currentWord = currentCategory.words[j]
+        if (
+  lowerMessage.includes(currentWord) ||
+  lowerMessage.includes(currentCategory.name.toLowerCase())
+) {
+  score = score + currentCategory.points
+  riskReasons.push(currentCategory.name + " language detected")
+  break
+}
+    }
+}
+
+const websiteSignals = [
+  {
+    value: ".xyz",
+    points: 20,
+    reason: "Unusual domain ending detected"
+  },
+  {
+    value: "login",
+    points: 10,
+    reason: "Login-related wording detected in website"
+  },
+  {
+    value: "verify",
+    points: 10,
+    reason: "Verification wording detected in website"
+  },
+  {
+    value: "secure",
+    points: 10,
+    reason: "Security-related wording detected in website"
+  }
+]
+for (let i = 0; i < websiteSignals.length; i++) {
+  if (lowerWebsite.includes(websiteSignals[i].value)) {
+    score = score + websiteSignals[i].points
+
+    riskReasons.push(
+      websiteSignals[i].reason
+    )
+  }
+}
+const brands = [
+  {
+    name: "barclays",
+    officialDomain: "barclays.co.uk"
+  },
+  {
+    name: "paypal",
+    officialDomain: "paypal.com"
+  },
+  {
+    name: "amazon",
+    officialDomain: "amazon.co.uk"
+  }
 ]
 
-for (let i = 0; i < suspiciousPhrases.length; i++) {
-  const phrase = suspiciousPhrases[i]
+for (let i = 0; i < brands.length; i++) {
 
-  if (lowerMessage.includes(phrase)) {
-    score = score + 10
-    riskReasons.push("Suspicious phrase detected: " + phrase)
-  }
-}
+  const brand = brands[i]
 
-  if (lowerWebsite.includes(".xyz")) {
+  if (
+    lowerMessage.includes(brand.name) &&
+    website !== "" &&
+    !lowerWebsite.includes(brand.officialDomain)
+  ) {
     score = score + 20
-    riskReasons.push("Suspicious website ending detected")
-  }
 
-  if (lowerWebsite.includes("login")) {
-    score = score + 10
-    riskReasons.push("Website contains login-related wording")
+    riskReasons.push(
+      "Possible " + brand.name + " impersonation detected"
+    )
   }
-
-  if (lowerWebsite.includes("secure")) {
-    score = score + 10
-    riskReasons.push("Website uses security-related wording")
-  }
-
-  if (lowerWebsite.includes("secure")) {
-  score = score + 10
-  riskReasons.push("Website uses security-related wording")
 }
+for (let i = 0; i < brands.length; i++) {
+  const brand = brands[i]
 
+  if (
+    lowerMessage.includes(brand.name) &&
+    hostname !== "" &&
+    hostname !== brand.officialDomain &&
+    !hostname.endsWith("." + brand.officialDomain)
+  ) {
+    score = score + 20
+
+    riskReasons.push(
+      "Possible " + brand.name + " impersonation detected"
+    )
+  }
+}
 score = Math.min(score, 100)
 
   let level = ""
