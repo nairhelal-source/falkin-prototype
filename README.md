@@ -1,16 +1,46 @@
-# React + Vite
+# Falkin Prototype
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A lightweight payment-risk checker built with React and a small Node.js API. It helps users evaluate a payment request by reviewing the message, website, amount, recipient status, and channel before sending money.
 
-Currently, two official plugins are available:
+## What was added
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- A form for entering payment details and suspicious message content
+- Frontend analysis results with risk score, risk level, detected risks, and action guidance
+- Severity-based intervention messaging for low, medium, high, and critical risk states
+- A verification flow for stronger warnings so users must acknowledge risky scenarios before continuing
+- A clean, styled result panel and action buttons for better usability
 
-## React Compiler
+## Recent updates
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This project now includes a clearer risk-analysis flow and stronger visual cues for intervention states. The UI is designed to help users understand whether a payment request looks risky and what they should do next.
 
-## Expanding the ESLint configuration
+## How it works
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. The user enters the payment request details in the form.
+2. The frontend sends the data to the backend analysis API.
+3. The API evaluates the message, website, amount, and context.
+4. The UI displays a score, reasons, recommended action, and an intervention message.
+
+## Verification
+
+The project was checked with a production build:
+
+- `npm run build` ✅
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Then start the API server in the `server` folder:
+
+```bash
+cd server
+node server.js
+```
+
+## Notes
+
+The project is intentionally focused on demonstrating a practical scam-risk warning flow and clear intervention messaging for suspicious payments.
