@@ -154,6 +154,98 @@
   }
 }
 
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f6f8;
+}
+
+.app-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.form-card,
+.result-card,
+.evaluation-card {
+  background: white;
+  padding: 24px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.form-section {
+  margin-bottom: 20px;
+}
+
+textarea,
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font: inherit;
+  background: #fff;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.checkbox-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox-row input {
+  width: auto;
+}
+
+button {
+  padding: 10px 16px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.primary-button,
+.secondary-button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.primary-button {
+  background: #111827;
+  color: #fff;
+  margin-top: 8px;
+}
+
+.secondary-button {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.result-panel,
+.result-card,
+.evaluation-card {
+  margin-top: 28px;
+}
+
+.result-card ul,
+.evaluation-card ul {
+  margin: 12px 0 0 20px;
+  padding: 0;
+}
+
 .intervention-low {
   padding: 15px;
   margin-top: 20px;
@@ -188,6 +280,18 @@
   border: 3px solid red;
   border-radius: 8px;
   font-weight: bold;
+}
+
+.intervention-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.secondary-button {
+  background: #e5e7eb;
+  color: #111827;
 }
 
 #spacer {
